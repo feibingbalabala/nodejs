@@ -104,5 +104,97 @@ __dirname：文件所在的文件夹路径（绝对地址）
 
 ### require特性
 
-1. 只加载一次，加载后缓存
-2. 一旦一个模块被循环加载，就值输出已经执行的部分，还未执行的部分不会加载
+1. 只加载一次，加载后缓存(demo1/04cache.js)
+2. 一旦一个模块被循环加载，就值输出已经执行的部分，还未执行的部分不会加载(demo1/05_main.js)
+
+### 引用系统内置模块和第三方模块
+
+系统模块(demo1/06_fs.js)
+
+```js
+const fs = require('fs');
+
+const result = fs.readFile('./06_fs.js', (err, data) => {
+  if (err) {
+    console.log(err) // 报错信息，找不到文件
+  } else {
+    console.log(data.toString()) // 不加toString()会得到一堆二进制的文件
+  }
+});
+
+console.log(result) // undefined，读取文件是异步的，这时候还没读取
+```
+
+第三方模块
+
+首先npm下载依赖查找本模块，找不到就去node_modules文件找
+
+```js
+const chalk = require('chalk')
+
+console.log(chalk.red('red'))
+```
+
+npm root -g 可以知道本电脑所有的全局依赖
+
+### model.exports和exports的区别
+
+exports默认是model.exports，但修改了exports，他就不在默认了
+
+### global全局变量
+
+CommonJS
+
+buffer：表示二级制数据处理
+
+process：和进程相关挂载在global
+
+```js
+const {argv, argv0, execArgv, execPath, env} = process;
+// argv启动的参数 例如 node 08_process.js a
+// 输出node所在的文件目录，08_process.js的文件目录，a
+argv.forEach(item => {
+  console.log(item)
+});
+
+console.log(argv0) // 输出第一个node所在的文件目录
+
+console.log(execArgv) // 输出在文件名前面的参数
+
+console.log(execPath) // 调用的程序路径
+
+console.log(env) // 当前系统的执行环境
+
+console.log(process.cwd()) // 一个函数，输出当前命令执行所在的文件
+```
+
+console: 打印
+
+timer: 计时器
+
+```js
+// 一样有setTimeOut(),setInterval()
+setImmediate(() => {
+
+})
+// 和时间无关 等下一个事件队列，同步任务执行后执行他
+
+process.nextTick(() => {
+  // 会比setImmediate执行早，setTimeOut在他们之间
+  // nextTick放在当前事件队列最后，setImmediate下一个事件队列之前
+  // nextTick出现循环调用会导致后面的异步无法执行，选择需要慎重
+})
+```
+
+```js
+// 暴露到全局
+global.prop = 100
+```
+
+### debug调试
+
+在node命令和文件中间输入 --inspect-brk
+
+例如 node --inspect-brk 10_debug.js
+
+在chrome浏览器中输入chrome://inspect，点击target
