@@ -198,3 +198,188 @@ global.prop = 100
 例如 node --inspect-brk 10_debug.js
 
 在chrome浏览器中输入chrome://inspect，点击target
+
+## node的API
+
+normalize：把不规范的路径处理规范。(demo1/11_normalize.js)
+
+```js
+const {normalize} = require('path')
+
+console.log(normalize('/user///local'))
+```
+
+join：把传入的路径拼接起来，本身也会调用normalize。(demo1/12_join.js)
+
+```js
+const {join} = require('path')
+
+console.log(join('/user', 'local', 'path1'))
+```
+
+resolve：把相对路径变成绝对路径。(demo2/13_resolve.js)
+
+```js
+const {resolve} = require('path');
+
+console.log(resolve('./'))
+```
+
+basename、dirname、extname
+
+```js
+const {basename, dirname, extname} = require('path')
+
+const filePath = '/user/local/text.txt'
+
+console.log("basename:", basename(filePath)) // 文件名text.txt
+console.log("dirname", dirname(filePath)) // 文件目录/user/local
+console.log("extname", extname(filePath)) // 文件拓展名.txt
+```
+
+parse、format
+
+```js
+const {parse, format} = require('path');
+
+const filePath = '/user/local/text.jpg'
+
+const parseRes = parse(filePath)
+
+console.log(parseRes)
+
+// { root: '/',
+//   dir: '/user/local',
+//   base: 'text.jpg',
+//   ext: '.jpg',
+//   name: 'text'
+// }
+
+const formatRes = format(parseRes)
+
+console.log(formatRes) // /user/local\text.jpg
+```
+
+## path
+
+__dirname、__filename总是返回文件的绝对路径
+
+process.cwd()总是返回执行Node命令所在文件夹
+
+## Buffer
+
+buffer用于处理二进制数据流
+
+实例类似整数数组、大小固定
+
+c++代码在v8堆外分配物理内存
+
+```js
+console.log(Buffer.alloc(10)) // <Buffer 00 00 00 00 00 00 00 00 00 00>
+console.log(Buffer.alloc(20)) // <Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00>
+console.log(Buffer.alloc(5, 1)) // <Buffer 01 01 01 01 01>
+console.log(Buffer.allocUnsafe(10)) // <Buffer 19 b7 58 98 bc 03 00 00 00 00>
+
+console.log(Buffer.from([1, 2, 3])) // <Buffer 01 02 03>
+console.log(Buffer.from('text')) // <Buffer 74 65 78 74> 默认utf8
+console.log(Buffer.from('text', 'base64')) // <Buffer b5 ec 6d>
+
+console.log(Buffer.byteLength('text')) // 4
+console.log(Buffer.byteLength('文字')) // 6
+// 判断是否二进制
+console.log(Buffer.isBuffer({})); // false
+console.log(Buffer.isBuffer(Buffer.from([1, 2, 3]))) // true
+// 拼接buffer
+const buf1 = Buffer.from('jiang')
+const buf2 = Buffer.from('wen')
+const buf3 = Buffer.from('yong')
+const name = Buffer.concat([buf1, buf2, buf3])
+console.log(name.toString()) // jiangwenyong
+// buffer的长度，和申请空间有关
+const buf = Buffer.from('jiangwenyong')
+console.log(buf.length); // 12
+// 字符串转换
+console.log(buf.toString('base64'))
+// 填充
+const bufFill = Buffer.allocUnsafe(10);
+console.log(bufFill) // <Buffer 60 13 bf f4 16 02 00 00 07 00>
+console.log(bufFill.fill(10, 1, 9)) // Buffer 60 0a 0a 0a 0a 0a 0a 0a 0a 00>
+// 比较buffer大小
+const bufEq1 = Buffer.from('a');
+const bufEq2 = Buffer.from('a');
+const bufEq3 = Buffer.from('b');
+console.log(bufEq1.equals(bufEq2)) // true
+console.log(bufEq1.equals(bufEq3)) // false
+// indexOf
+const bufIdx = Buffer.from('abcd');
+console.log(bufIdx.indexOf('bc')) // 1
+console.log(bufIdx.indexOf('bca')) // -1
+// copy方法，解决中文乱码
+const { StringDecoder } = require('string_decoder')
+const decoder = new StringDecoder('utf8')
+const bufCopy = Buffer.from('中文乱码！');
+for (let i = 0; i < bufCopy.length; i += 4) {
+  const b = Buffer.allocUnsafe(4);
+  bufCopy.copy(b, 0, i);
+  console.log(b.toString())
+}
+for (let i = 0; i < bufCopy.length; i += 4) {
+  const b = Buffer.allocUnsafe(4);
+  bufCopy.copy(b, 0, i);
+  console.log(decoder.write(b))
+}
+```
+
+## events事件
+
+```js
+const EventEmitter = require('events')
+// 触发一个事件
+class CustomEvent extends EventEmitter {}
+const ce = new CustomEvent();
+ce.on('test', ()=> {
+  console.log('test')
+})
+// setInterval(() => {
+//   ce.emit('test')
+// }, 500);
+// 传递参数
+class CustomError extends EventEmitter {}
+const cb = new CustomError();
+cb.on('error', (err, timer) => {
+  console.log(err)
+  console.log(timer)
+})
+// cb.emit('error', new Error('oops!'), Date.now());
+// once
+class CustomOnce extends EventEmitter {}
+const cc = new CustomOnce();
+cc.once('once', () => {
+  console.log('once')
+})
+// setInterval(() => {
+//   cc.emit('once')
+// }, 500);
+// remove
+class CustomRemove extends EventEmitter {}
+function fn1 () {
+  console.log('fn1')
+}
+function fn2 () {
+  console.log('fn2')
+}
+const cd = new CustomRemove()
+cd.on('remove', fn1);
+cd.on('remove', fn2);
+setInterval(() => {
+  cd.emit('remove')
+}, 500);
+setTimeout(() => {
+  // cd.removeListener('remove', fn1)
+  // cd.removeListener('remove', fn2)
+  // 移除全部
+  cd.removeAllListeners('remove')
+}, 1500);
+```
+
+## fs（文件系统）
