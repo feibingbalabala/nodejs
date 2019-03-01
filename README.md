@@ -438,6 +438,8 @@ fs.watch('./', {
 })
 ```
 
+(demo1/19_fs.js)
+
 ### stream（流）
 
 ```js
@@ -464,3 +466,42 @@ ws.on('finish', () => {
   console.log('done')
 })
 ```
+
+(demo1/20_stream.js)
+
+### 解决回调地狱
+
+解决A函数中执行B函数回调，B函数中执行C的回调
+
+```js
+const fs = require('fs')
+
+const { promisify } = require('util')
+
+const read = promisify(fs.readFile);
+
+// 方法1 promisify
+
+read('./21_promisify.js').then(data => {
+  console.log(data.toString())
+}).catch(ex => {
+  console.log(ex)
+})
+
+// async await
+
+async function test () {
+  try {
+    const content = await read('./21_promisify.js')
+    console.log(content.toString())
+  } catch (ex) {
+    console.log(ex)
+  }
+}
+
+test()
+```
+
+(demo1/21_promisify.js)
+
+## 实现一个静态资源服务器跟目录（anywhere）
