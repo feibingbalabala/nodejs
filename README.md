@@ -510,7 +510,7 @@ test()
 
 在Headers中RequestHeaders的Accept-Encoding: gzip, deflate是浏览器发给服务器的信息，告诉服务器浏览器支持什么压缩格式。Response Header中content-encoding: 代表服务器发给浏览器的压缩格式。
 
-(anydoor/helper/compress)
+(myanydoor/src/helper/compress)
 
 ### range范围请求
 
@@ -520,6 +520,8 @@ Accept-Ranges: bytes
 
 Content-Range: bytes start-end/total
 
+(myanydoor/src/helper/range)
+
 ### 缓存
 
 Expires(绝对时间), Cache-Control(相对时间): 来判断是否失效的时间
@@ -527,3 +529,5 @@ Expires(绝对时间), Cache-Control(相对时间): 来判断是否失效的时�
 If-Modified-Since / Last-Modified: 服务器每次反问告诉你上次修改的时间
 
 If-None-Match / ETag: 生成一个hash值
+
+(myanydoor/src/helper/cache)

@@ -4,7 +4,7 @@ const {promisify} = require('util');
 const stat = promisify(fs.stat);
 const readdir = promisify(fs.readdir);
 const handlebars = require('handlebars');
-const config = require('../config/defaultConfig');
+// const config = require('../config/defaultConfig');
 const mine = require('./mime');
 const compress = require('./compress');
 const range = require('./range');
@@ -13,17 +13,17 @@ const tplPath = path.join(__dirname, '../template/dir.html');
 const source = fs.readFileSync(tplPath);
 const template = handlebars.compile(source.toString());
 
-module.exports = async function (req, res, filePath) {
+module.exports = async function (req, res, filePath, config) {
   try {
     const stats = await stat(filePath)
     if (stats.isFile()) {
       const contentType = mine(filePath);
       res.setHeader('Content-Type', contentType);
-      if (isFresh(stats, req, res)) {
-        res.statusCode = 304;
-        res.end();
-        return
-      }
+      // if (isFresh(stats, req, res)) {
+      //   res.statusCode = 304;
+      //   res.end();
+      //   return
+      // }
       let rs;
       const {code, starts, end} = range(stats.size, req, res);
       if (code === 200) {

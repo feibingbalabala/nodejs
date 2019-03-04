@@ -4,10 +4,10 @@ module.exports = {
   port: 8080,
   compress: /\.(html|js|css|md)/,
   cache: {
-    maxAge: 600,
-    expires: true,
-    cacheControl: true,
-    lastModified: true,
-    etag: true
+    maxAge: 10000,
+    expires: false,
+    cacheControl: false,
+    lastModified: false,
+    etag: false
   }
 }
