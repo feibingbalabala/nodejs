@@ -531,3 +531,70 @@ If-Modified-Since / Last-Modified: 服务器每次反问告诉你上次修改的
 If-None-Match / ETag: 生成一个hash值
 
 (myanydoor/src/helper/cache)
+
+## 测试
+
+### assert-断言
+
+一个简单的测试用例
+
+```js
+  // math.js
+  module.exports = {
+    add: ( ...args ) => {
+        return args.reduce((prev, curr) => {
+            return prev + curr;
+        })
+    },
+
+    mul: ( ...args ) => {
+        return args.reduce((prev, curr) => {
+            return prev * curr;
+        });
+    }
+  }
+```
+
+```js
+  // simple.js
+  const assert = require('assert');
+  const { add, mul } = require('../src/math');
+
+  if (add(2, 3) === 5) {
+    console.log('add(2, 3) === 5，ok');
+  } else {
+    console.log('add(2, 3) !== 5，error');
+  }
+```
+
+使用chai，mocha
+
+```js
+  npm install chai
+  npm install mocha
+
+  // 在pagejson.js的scripts里面使用命令行
+  // "test": "mocha ./mocha.js"
+  // mocha.js
+  const assert = require('assert');
+  const { add, mul } = require('../src/math');
+
+  describe('#math', () => {
+    describe('add', () => {
+        it ('should return 5 when 2 + 3', () => {
+            assert.equal(add(2, 3), 5);
+        });
+
+        it ('should return -1 when 2 + -3', () => {
+            assert.equal(add(2, -3), -1);
+        });
+    });
+
+    describe('mul', () => {
+        it ('should return 6 when 2 * 3', () => {
+            assert.equal(mul(2, 3), 6);
+        });
+    });
+  });
+```
+8-2
