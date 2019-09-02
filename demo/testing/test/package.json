@@ -4,12 +4,17 @@
   "description": "单元测试",
   "main": "",
   "scripts": {
-    "test": "mocha ./mocha.js"
+    "test": "mocha ./mocha.js",
+    "cover": "istanbul cover _mocha ./mocha.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.0"
+  },
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "istanbul": "^0.4.5"
   }
 }

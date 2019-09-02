@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { add, mul } = require('../src/math');
+const { add, mul, cover } = require('../src/math');
 
 describe('#math', () => {
     describe('add', () => {
@@ -15,6 +15,20 @@ describe('#math', () => {
     describe('mul', () => {
         it ('should return 6 when 2 * 3', () => {
             assert.equal(mul(2, 3), 6);
+        });
+    });
+
+    describe('cover', () => {
+        it ('should return 6 when cover(2, 3)', () => {
+            assert.equal(cover(2, 3), 6);
+        });
+
+        it ('should return 1 when cover(3, 2)', () => {
+            assert.equal(cover(3, 2), 1);
+        });
+
+        it ('should return 1 when cover(2, 2)', () => {
+            assert.equal(cover(2, 2), 4);
         });
     });
 });
