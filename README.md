@@ -597,4 +597,165 @@ If-None-Match / ETag: 生成一个hash值
     });
   });
 ```
-8-2
+
+测试覆盖率
+
+利用istanbul测试测试用例的执行顺序和执行覆盖率
+
+```js
+npm install istanbul
+
+// math.js
+function min (a, b) {
+    return b * a;
+}
+
+module.exports = {
+    add: ( ...args ) => {
+        return args.reduce((prev, curr) => {
+            return prev + curr;
+        });
+    },
+
+    mul: ( ...args ) => {
+        return args.reduce((prev, curr) => {
+            return prev * curr;
+        });
+    },
+
+    cover: (a, b) => {
+        if (a > b) {
+            return a - b;
+        } else if (a === b) {
+            return a + b;
+        } else {
+            return min(a, b)
+        }
+    }
+}
+
+// mocha.js
+
+const assert = require('assert');
+const { add, mul, cover } = require('../src/math');
+
+describe('#math', () => {
+    describe('add', () => {
+        it ('should return 5 when 2 + 3', () => {
+            assert.equal(add(2, 3), 5);
+        });
+
+        it ('should return -1 when 2 + -3', () => {
+            assert.equal(add(2, -3), -1);
+        });
+    });
+
+    describe('mul', () => {
+        it ('should return 6 when 2 * 3', () => {
+            assert.equal(mul(2, 3), 6);
+        });
+    });
+
+    describe('cover', () => {
+        it ('should return 6 when cover(2, 3)', () => {
+            assert.equal(cover(2, 3), 6);
+        });
+
+        it ('should return 1 when cover(3, 2)', () => {
+            assert.equal(cover(3, 2), 1);
+        });
+
+        it ('should return 1 when cover(2, 2)', () => {
+            assert.equal(cover(2, 2), 4);
+        });
+    });
+});
+```
+
+持续集成
+
+1、频繁地将代码集成到主干。
+
+2、每次集成都通过自动化构建来验证。
+
+优点：今早发现错误，防止分支大幅偏离主干
+
+性能
+
+使用benchmark做性能测试，ops/sec每秒操作次数，误差率，越大越好。
+
+```js
+npm install benchmark
+
+const Benchmark = require('benchmark');
+const suite = new Benchmark.Suite;
+
+suite.add('RefExp#test', function() {
+    /o/.test('Hellow World!');
+})
+.add('String#indexOf', function() {
+    'Hello World!'.indexOf('o') > -1;
+})
+.add('String#match', function() {
+    !!'Hello World'.match(/o/);
+})
+.on('cycle', function(event) {
+    console.log(String(event.target));
+})
+.on('complete', function() {
+    console.log('Fastest is ' + this.filter('fastest').map('name'))
+})
+.run({'async': true})
+```
+
+## 爬虫
+
+按照一定的规则自动抓取网络信息的程序
+
+### 反爬虫
+
+1、User-Agent、Referer，验证码。
+
+2、单位时间访问次数、访问量。
+
+3、关键信息图片混淆。
+
+4、异步加载。
+
+### puppeteer
+
+```js
+const puppeteer = require('puppeteer');
+const { screenshot } = require('./config/defult');
+
+(async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('https://www.baidu.com');
+    await page.screenshot({
+        path: `${screenshot}/${Date.now()}.png`
+    });
+    await browser.close();
+})()
+```
+
+puppeteer安装失败
+
+安装puppeteer时因为需要下载chrom的缘故总是安装失败提示，执行npm install puppeteer --ignore-scripts 跳过安装chromuin步骤
+
+```js
+const puppeteer = require('puppeteer');
+
+
+(async () => {
+    const browser = await puppeteer.launch({
+        executablePath: './Chromium'
+    });
+    const page = await browser.newPage();
+    await page.goto('https://www.baidu.com');
+    await page.screenshot({
+      path: `${screenshot}/${Date.now()}.png`
+    });
+    browser.close();
+})();
+```
