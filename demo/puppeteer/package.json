@@ -1,0 +1,21 @@
+{
+  "name": "puppeteer_demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chromium": "^2.1.1",
+    "debug": "^4.1.1",
+    "extract-zip": "^1.6.7",
+    "https-proxy-agent": "^2.2.2",
+    "mime": "^2.4.4",
+    "proxy-from-env": "^1.0.0",
+    "rimraf": "^3.0.0",
+    "ws": "^7.1.2"
+  }
+}
