@@ -759,3 +759,11 @@ const puppeteer = require('puppeteer');
     browser.close();
 })();
 ```
+
+## 搭建一个基于express框架的运行环境
+
+1、安装express
+
+2、通过生成器自动生成目录
+
+3、配置分析
