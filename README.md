@@ -808,7 +808,7 @@ var app = express();
 // 使用html
 app.set('views', path.join(__dirname, 'views/html'));
 app.engine('.html', ejs.__express);
-app.set('view engine', 'html'); 
+app.set('view engine', 'html');
 
 app.use(logger('dev')); // 使用第三方插件
 app.use(express.json());
@@ -844,3 +844,75 @@ module.exports = app;
 tip: 修改内容有点麻烦要重启
 
 如果需要使用html模版需要安装ejs
+
+## MongoDB
+
+高可拓展性
+
+分布式存储
+
+低成本
+
+结构灵活
+
+### 安装MongoDB
+
+1、下载安装包或者压缩包
+
+2、添加db存储和日志存储文件夹
+
+3、添加服务、配置环境变量、启用Mongo
+
+### 配置MongoDB
+
+a.在c:\MongoDB（可随意起）下面建一个data文件夹 c:\MongoDB\data
+
+b.在c:\MongoDB（可随意起）下面建一个logs文件夹 c:\MongoDB\logs ，在里面建一个文件mongo.log
+
+c.在c:\MongoDB（可随意起）下面建一个etc(随意起，放配置文件)文件夹 c:\MongoDB\etc ,在里面建一个文件mongo.conf
+
+d.打开mongo.conf文件，修改如下：
+
+数据库路径
+
+```code
+  dbpath=c:\MongoDB\data\
+```
+
+日志输出文件路径
+
+```code
+  logpath=c:\MongoDB\logs\mongodb.log
+```
+
+错误日志采用追加模式，配置这个选项后mongodb的日志会追加到现有的日志文件，而不是从新创建一个新文件
+
+```code
+  logappend=true
+```
+
+启用日志文件，默认启用
+
+```code
+  journal=true
+```
+
+这个选项可以过滤掉一些无用的日志信息，若需要调试使用请设置为false
+
+```code
+  quiet=false
+```
+
+端口号 默认为27017
+
+```code
+  port=27017
+```
+
+指定存储引擎（默认先不加此引擎，如果报错了，大家在加进去）
+
+```code
+  storageEngine=mmapv1
+```
+
+http://www.imooc.com/article/18438
