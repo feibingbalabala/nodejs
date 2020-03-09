@@ -865,11 +865,13 @@ tip: 修改内容有点麻烦要重启
 
 ### 配置MongoDB
 
-a.在c:\MongoDB（可随意起）下面建一个data文件夹 c:\MongoDB\data
+安装时选用custom
 
-b.在c:\MongoDB（可随意起）下面建一个logs文件夹 c:\MongoDB\logs ，在里面建一个文件mongo.log
+a.在c:\MongoDB（可随意起）下面建一个data文件夹 c:\MongoDB\data。（目前安装的时候会有可视化指定）
 
-c.在c:\MongoDB（可随意起）下面建一个etc(随意起，放配置文件)文件夹 c:\MongoDB\etc ,在里面建一个文件mongo.conf
+b.在c:\MongoDB（可随意起）下面建一个logs文件夹 c:\MongoDB\logs ，在里面建一个文件mongo.log。（目前安装的时候会有可视化指定）
+
+c.在c:\MongoDB（可随意起）下面建一个etc(随意起，放配置文件)文件夹 c:\MongoDB\etc ,在里面建一个文件mongo.conf。（目前安装的时候会有可视化指定）
 
 d.打开mongo.conf文件，修改如下：
 
