@@ -917,4 +917,13 @@ d.打开mongo.conf文件，修改如下：
   storageEngine=mmapv1
 ```
 
+```code
+  // 执行看看如果能出现访问端口27017等等，并且通过localhost:27017能出现
+  // It looks like you are trying to access MongoDB over HTTP on the native driver port.
+  // 访问成功
+  mongod --dbpath c:\MongoDB\data
+```
+
 http://www.imooc.com/article/18438
+
+可以下载一个MongoVUE可视化数据库连接
