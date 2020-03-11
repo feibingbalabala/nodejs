@@ -917,13 +917,107 @@ d.打开mongo.conf文件，修改如下：
   storageEngine=mmapv1
 ```
 
+启动MongoDB
+
 ```code
   // 执行看看如果能出现访问端口27017等等，并且通过localhost:27017能出现
   // It looks like you are trying to access MongoDB over HTTP on the native driver port.
   // 访问成功
+  // 一定要进入Mongo安装的文件夹的bin目录才可以执行mongod.exe，如果觉得麻烦可以在环境变量上添加Mongo把路劲指向Mongo安装的文件夹的bin目录
   mongod --dbpath c:\MongoDB\data
 ```
 
 http://www.imooc.com/article/18438
 
 可以下载一个MongoVUE可视化数据库连接
+
+| SQL术语/概念 | MongoDB术语/概念 | 解释/说明 |
+| ------ | ------ | ------ |
+| database | database | 数据库 |
+| table | collection | 数据库表/集合 |
+| row | document | 数据记录行/文档 |
+| column | field | 数据字段/域 |
+| index | index | 索引 |
+| tablejoins |  | 表连接，MongoDB不支持 |
+| primary key | primary key | 主键，MongoDB自动将_id字段设置为主键 |
+
+进入Mongo安装的文件夹的bin目录才能执行下列操作
+
+查看目录下面有什么数据库
+
+```code
+  show dbs
+```
+
+创建一个集合
+
+```code
+// 方法1
+db.createCollection("user")
+// 方法2
+db.user.insert({id:1,name:'jwy'})
+```
+
+查看集合
+
+```code
+  show collections
+```
+
+删除数据库demo
+
+```code
+  // 首先进入数据库
+  use demo
+  db.dropDatabase()
+```
+
+删除集合user
+
+```code
+  // 首先进入数据库
+  use demo
+  // db代表当前数据库，user代表集合
+  db.user.drop()
+```
+
+插入集合(注意每个命令里面都是对象)
+
+```code
+  db.user.insert({userId:1,userName:'jwy',userAge:18,class:{name:'fee',num:12}})
+```
+
+查询集合的内容
+
+```code
+  db.user.find()
+  // 格式化
+  db.user.find().pretty()
+  // 查询第一条数据
+  db.user.findOne()
+  // 查询某条数据
+  db.user.find({userName: 'jwy'})
+  db.user.find({'class.name':'fee'})
+  // 条件查询
+  db.user.find({userAge:{$gt:20}}) // 年龄大于20
+  // 条件查询
+  db.user.find({userAge:{$lt:20}}) // 年龄小于20
+  // 条件查询
+  db.user.find({userAge:{$eq:20}}) // 年龄等于20
+  // 条件查询
+  db.user.find({userAge:{$gte:20}}) // 年龄大于等于20
+```
+
+更新集合的内容
+
+```code
+  db.user.update({userName:"jwy"},{$set:{userAge:20}})
+  // 更新集合内的子内容
+  db.user.update({userName:"jwy"},{$set:{'class.num':20}})
+```
+
+删除文档
+
+```code
+  db.user.remove({userName:"jwy"})
+```
