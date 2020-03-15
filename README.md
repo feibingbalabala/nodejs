@@ -1021,3 +1021,46 @@ db.user.insert({id:1,name:'jwy'})
 ```code
   db.user.remove({userName:"jwy"})
 ```
+
+demo（新建两个集合）
+
+```code
+  Goods: {
+    productId: String,
+    productName: String,
+    salePrcie: Number,
+    checked: String,
+    productNum: Number,
+    productImage: String
+  }
+  Users: {
+    userId: String,
+    userName: String,
+    userPwd: String,
+    orderList: Array,
+    cartList: [
+      {
+        productId: String,
+        productName: String,
+        salePrcie: Number,
+        checked: String,
+        productNum: Number
+      }
+    ],
+    addressList: [
+      {
+        addressId: String,
+        userNmae: String,
+        streetName: String,
+        postCode: Number,
+        tel: number,
+        isDefault: Boolean
+      }
+    ]
+  }
+  // 命令导入
+  mongoimport -d db_demo -c users --file ...
+  -d: 数据库
+  -c: 集合
+  --file: 导入的文件地址
+```
