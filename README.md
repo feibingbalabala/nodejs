@@ -1064,3 +1064,45 @@ demo（新建两个集合）
   -c: 集合
   --file: 导入的文件地址
 ```
+
+## pm2
+
+PM2是node进程管理工具，可以利用它来简化很多node应用管理的繁琐任务，如性能监控、自动重启、负载均衡等。
+
+```code
+npm install pm2 -g
+```
+
+pm2 start app.js --watch -i 2
+
+重启
+
+pm2 restart app.js
+
+停止
+
+停止特定的应用。可以先通过pm2 list获取应用的名字（--name指定的）或者进程id。
+
+pm2 stop app_name|app_id
+
+如果要停止所有应用，可以
+
+pm2 stop all
+
+删除
+
+类似pm2 stop，如下
+
+pm2 stop app_name|app_id
+
+pm2 stop all
+
+查看进程状态
+
+pm2 list
+
+在我项目中命令是
+
+```code
+  pm2 start demo/express_demo/server/bin/www
+```
